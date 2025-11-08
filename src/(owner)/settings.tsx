@@ -10,7 +10,7 @@ import {
 import Sidebar from "./components/sidebar";
 import { useNavigate, Link } from "react-router";
 import { useAuthStore } from "../(auth)/store/Auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChangePasswordModal from "./components/change_password";
 import UpdateProfileModal from "./components/update_profile";
 
@@ -54,6 +54,10 @@ const SettingsItem = ({
 export default function SettingsScreen() {
   const navigate = useNavigate();
   const { logout } = useAuthStore();
+
+  useEffect(() => {
+    document.title = "OneStay / Settings";
+  }, []);
 
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);

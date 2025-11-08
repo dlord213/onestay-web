@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import type { User, UserRole } from "./types/user";
 import { authAPI } from "../api/auth";
 import { useAuthStore } from "./store/Auth";
@@ -54,6 +54,10 @@ export default function LoginScreen() {
     }
   };
 
+  useEffect(() => {
+    document.title = "OneStay / Login";
+  }, []);
+
   return (
     <main className="flex flex-col min-h-dvh p-4 mx-auto bg-base-300 items-center justify-center">
       <form
@@ -105,7 +109,11 @@ export default function LoginScreen() {
           </fieldset>
         </div>
 
-        <button type="submit" className="btn btn-primary" disabled={isLoading}>
+        <button
+          type="submit"
+          className="btn btn-neutral btn-ghost"
+          disabled={isLoading}
+        >
           {isLoading ? (
             <>
               <span className="loading loading-spinner"></span>

@@ -37,6 +37,10 @@ export default function OwnerChatConversation() {
   const messageListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    document.title = "OneStay / Chat";
+  }, []);
+
+  useEffect(() => {
     initializeChat();
     return () => {
       if (chatId) {

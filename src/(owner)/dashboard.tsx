@@ -225,6 +225,10 @@ export default function DashboardScreen() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedResort, setSelectedResort] = useState<Resort | null>(null);
 
+  useEffect(() => {
+    document.title = "OneStay / Dashboard";
+  }, []);
+
   // --- Data Fetching Functions ---
 
   const fetchReservations = useCallback(

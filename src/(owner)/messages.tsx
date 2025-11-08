@@ -52,6 +52,10 @@ export default function ChatListScreen() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    document.title = "OneStay / Messages";
+  }, []);
+
   const { resorts, loading: resortsLoading, hasResorts } = useResortStore();
   const { user } = useAuthStore();
 

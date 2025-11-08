@@ -56,6 +56,10 @@ export default function RoomsScreen() {
   const { resorts, hasResorts, loading: resortsLoading } = useResortStore();
   const currentResortId = hasResorts ? resorts[0]._id : null;
 
+  useEffect(() => {
+    document.title = "OneStay / Rooms";
+  }, []);
+
   const fetchRooms = useCallback(async () => {
     if (!currentResortId) {
       setLoading(false);

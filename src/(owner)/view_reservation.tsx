@@ -46,6 +46,10 @@ export default function ViewReservationScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
+  useEffect(() => {
+    document.title = "OneStay / Reservation";
+  }, []);
+
   const fetchReservation = useCallback(async () => {
     if (!params.id) {
       setError("No reservation ID provided.");

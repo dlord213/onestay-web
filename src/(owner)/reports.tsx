@@ -70,6 +70,10 @@ export default function ReportsScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    document.title = "OneStay / Reports";
+  }, []);
+
   const fetchReservations = useCallback(async () => {
     try {
       setLoading(true);

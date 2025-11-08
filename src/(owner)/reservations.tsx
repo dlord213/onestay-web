@@ -27,6 +27,10 @@ export default function ReservationScreen() {
   const [isLoadingBookedDates, setIsLoadingBookedDates] = useState(false);
 
   useEffect(() => {
+    document.title = "OneStay / Reservations";
+  }, []);
+
+  useEffect(() => {
     const getRooms = async () => {
       if (!resorts || resorts.length === 0) {
         return;
