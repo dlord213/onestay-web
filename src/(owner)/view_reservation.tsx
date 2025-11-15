@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Sidebar from "./components/sidebar";
 import { useEffect, useState, useCallback } from "react";
@@ -6,8 +5,7 @@ import { reservationAPI, type Reservation } from "../api/reservation";
 import dayjs from "dayjs";
 import { AlertCircle, Check, ThumbsDown, X } from "lucide-react";
 import { getStatusColor } from "./helpers/ui";
-import { useParams, useNavigate } from "react-router";
-import type { User } from "../(auth)/types/user";
+import { useParams } from "react-router";
 
 // --- Helper Components ---
 
@@ -40,7 +38,6 @@ const ErrorComponent = ({
 
 export default function ViewReservationScreen() {
   const params = useParams();
-  const navigate = useNavigate();
 
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -136,7 +133,7 @@ export default function ViewReservationScreen() {
             <input
               type="text"
               className="input w-full"
-              value={(reservation.user_id.username as string) || "N/A"}
+              value={(reservation.user_id as any).username || "N/A"}
               disabled={true}
             />
           </fieldset>
@@ -145,7 +142,7 @@ export default function ViewReservationScreen() {
             <input
               type="text"
               className="input w-full"
-              value={(reservation.user_id.email as User["email"]) || "N/A"}
+              value={(reservation.user_id as any).email || "N/A"}
               disabled={true}
             />
           </fieldset>
@@ -168,7 +165,7 @@ export default function ViewReservationScreen() {
             <input
               type="text"
               className="input w-full"
-              value={reservation.room_id?.room_type || "N/A"}
+              value={(reservation.room_id as any)?.room_type || "N/A"}
               disabled={true}
             />
           </fieldset>

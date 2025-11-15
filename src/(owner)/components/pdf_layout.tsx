@@ -121,7 +121,7 @@ export const PDFReportLayout = React.forwardRef<
                 fill="#8884d8"
                 dataKey="value"
               >
-                {roomTypeData.map((entry, index) => (
+                {roomTypeData.map((_entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={colors[index % colors.length]}

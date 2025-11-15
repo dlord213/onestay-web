@@ -234,7 +234,7 @@ export default function ReportsScreen() {
                 fill="#8884d8"
                 dataKey="value"
               >
-                {roomTypeData.map((entry, index) => (
+                {roomTypeData.map((_entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
@@ -295,13 +295,13 @@ export default function ReportsScreen() {
         </div>
       </div>
       <PDFReportLayout
-          ref={targetRef}
-          monthlySalesData={monthlySalesData}
-          detailedSalesData={detailedSalesData}
-          roomTypeData={roomTypeData}
-          filter={selectedFilter}
-          colors={COLORS}
-        />
+        ref={targetRef}
+        monthlySalesData={monthlySalesData}
+        detailedSalesData={detailedSalesData}
+        roomTypeData={roomTypeData}
+        filter={selectedFilter}
+        colors={COLORS}
+      />
     </main>
   );
 }

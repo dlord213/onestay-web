@@ -5,6 +5,7 @@ import Sidebar from "./components/sidebar";
 import { useResortStore } from "./store/resort";
 import { Users, Plus, AlertCircle, Inbox } from "lucide-react";
 import CreateRoomModal from "./components/modals/add_room";
+import { Link } from "react-router";
 
 // --- Helper Components ---
 
@@ -101,7 +102,11 @@ export default function RoomsScreen() {
     }
 
     return rooms.map((room) => (
-      <div key={room._id} className="card bg-base-200 shadow-sm">
+      <Link
+        to={`/view/room/${room._id}`}
+        key={room._id}
+        className="card bg-base-200 shadow-sm"
+      >
         <div className="card-body">
           <h2 className="card-title">{room.room_type}</h2>
           <div className="flex flex-row gap-4 items-center">
@@ -116,7 +121,7 @@ export default function RoomsScreen() {
             <div className="badge badge-primary">{room.status}</div>
           </div>
         </div>
-      </div>
+      </Link>
     ));
   };
 

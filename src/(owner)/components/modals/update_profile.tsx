@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { X, User, Mail, AlertCircle, CheckCircle } from "lucide-react";
 import { useAuthStore } from "../../../(auth)/store/Auth";
 import { userAPI } from "../../../api/user";

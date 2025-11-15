@@ -45,7 +45,7 @@ export default function ChatListScreen() {
   const [chats, setChats] = useState<OwnerChat[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [socketConnected, setSocketConnected] = useState(false);
+  const [_socketConnected, setSocketConnected] = useState(false);
   const [errorAlert, setErrorAlert] = useState<{
     title: string;
     message: string;

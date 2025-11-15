@@ -57,6 +57,7 @@ npm install
 3. **Create an environment file**:
 Create a .env file in the root of the project and add your API's base URL:
 ```
+Example:
 VITE_API_BASE_URL=http://localhost:3000/api
 ```
 4. **Run the development server**:

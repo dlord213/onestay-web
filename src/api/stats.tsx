@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
-import { apiRequest, authenticatedApiRequest, API_BASE_URL } from "./client";
+import { API_BASE_URL } from "./client";
 
 export interface ResortStats {
   resortId: string;

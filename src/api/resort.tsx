@@ -41,17 +41,50 @@ export interface Resort {
 export const resortAPI = {
   createResort: async (
     resortData: ResortData,
+    selectedFile: File | null,
     token: string
   ): Promise<Resort> => {
     try {
-      const response = await authenticatedApiRequest("/resort", {
-        method: "POST",
-        body: JSON.stringify(resortData),
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response;
+      let response;
+
+      // If there is a file, use FormData
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append("resort_name", resortData.resort_name);
+        formData.append("location", JSON.stringify(resortData.location));
+        if (resortData.description) {
+          formData.append("description", resortData.description);
+        }
+        formData.append("image", selectedFile, selectedFile.name);
+
+        response = await fetch(`${API_BASE_URL}/resort`, {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            // DO NOT set Content-Type, let the browser do it
+          },
+        });
+      } else {
+        // If no file, send as JSON using our wrapper
+        response = await fetch(`${API_BASE_URL}/resort`, {
+          method: "POST",
+          body: JSON.stringify(resortData),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.message || `HTTP ${response.status}: ${response.statusText}`
+        );
+      }
+
+      return await response.json();
     } catch (error) {
       throw new Error(
         error instanceof Error ? error.message : "Failed to create resort"
@@ -122,7 +155,7 @@ export const resortAPI = {
   updateResort: async (
     resortId: string,
     resortData: Partial<ResortFormData>,
-    selectedFile: File | null, // <-- 2. Accept the File object
+    selectedFile: File | null,
     token: string
   ): Promise<Resort> => {
     try {

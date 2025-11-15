@@ -58,7 +58,7 @@ const NoResortEmptyState = () => (
       <Inbox size={64} className="opacity-30 mb-4" />
       <h1 className="text-3xl font-bold">Welcome!</h1>
       <p className="text-lg opacity-70">You don't have a resort set up yet.</p>
-      <Link to="/create-resort" className="btn btn-primary mt-4">
+      <Link to="/create/resort" className="btn btn-primary mt-4">
         Create Your First Resort
       </Link>
     </div>
@@ -384,7 +384,7 @@ export default function DashboardScreen() {
 
         <div className="flex flex-row gap-6 items-center">
           <img
-            className="w-32 aspect-square rounded-xl object-cover shadow-md"
+            className="w-64 aspect-video rounded-xl object-cover shadow-md"
             src={currentResort.image}
             alt={currentResort.resort_name}
           />

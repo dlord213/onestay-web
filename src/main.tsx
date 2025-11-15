@@ -19,6 +19,8 @@ import { useResortStore } from "./(owner)/store/resort";
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
 import "react-calendar/dist/Calendar.css";
+import ViewRoomScreen from "./(owner)/view_room";
+import CreateResortScreen from "./(owner)/create-resort";
 
 const router = createBrowserRouter([
   {
@@ -100,6 +102,17 @@ const router = createBrowserRouter([
     },
   },
   {
+    path: "create/resort",
+    Component: CreateResortScreen,
+    loader: async () => {
+      const { token } = useAuthStore.getState();
+
+      if (!token) {
+        return redirect("/");
+      }
+    },
+  },
+  {
     path: "view/messages/:chatId",
     Component: OwnerChatConversation,
     loader: async () => {
@@ -113,6 +126,17 @@ const router = createBrowserRouter([
   {
     path: "view/reservation/:id",
     Component: ViewReservationScreen,
+    loader: async () => {
+      const { token } = useAuthStore.getState();
+
+      if (!token) {
+        return redirect("/");
+      }
+    },
+  },
+  {
+    path: "view/room/:id",
+    Component: ViewRoomScreen,
     loader: async () => {
       const { token } = useAuthStore.getState();
 

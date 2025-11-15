@@ -11,7 +11,7 @@ import {
 } from "../api/reservation";
 import { getStatusColor } from "./helpers/ui";
 import { allMonths } from "./helpers/general";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 
 // --- Helper Components ---
 
@@ -53,15 +53,13 @@ const EmptyComponent = () => (
 // --- Main Screen Component ---
 
 export default function GuestsScreen() {
-  const navigate = useNavigate();
-
   const [selectedMonth, setSelectedMonth] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [reservations, setReservations] = useState<Reservation[]>([]);
 
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const [_refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { AlertCircle, MapPin, X, Camera, LocateFixed } from "lucide-react";
+import { AlertCircle, X, Camera, LocateFixed } from "lucide-react";
 import { useState, useRef, useEffect, useMemo } from "react";
-import { resortAPI, type Resort, type ResortFormData } from "../../../api/resort";
+import {
+  resortAPI,
+  type Resort,
+  type ResortFormData,
+} from "../../../api/resort";
 import { useResortStore } from "../../store/resort";
 import L, { LatLng } from "leaflet";
 import {
@@ -24,9 +28,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-/**
- * A component to handle map click events
- */
 function MapClickEvents({ onSelect }: { onSelect: (latlng: LatLng) => void }) {
   useMapEvents({
     click(e) {
@@ -36,9 +37,6 @@ function MapClickEvents({ onSelect }: { onSelect: (latlng: LatLng) => void }) {
   return null;
 }
 
-/**
- * A component to make the selected marker draggable
- */
 function DraggableMarker({
   position,
   setPosition,
@@ -407,7 +405,7 @@ export default function EditResortModal({
             ></textarea>
           </div>
 
-          {/* <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
             <label className="label">
               <span className="label-text font-medium">Resort Image</span>
             </label>
@@ -449,7 +447,7 @@ export default function EditResortModal({
               accept="image/png, image/jpeg"
               disabled={isSubmitting}
             />
-          </div> */}
+          </div>
         </div>
       </div>
     </dialog>
