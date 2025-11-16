@@ -261,8 +261,6 @@ export default function ChatListScreen() {
     navigate(`/view/messages/${chat._id}`);
   };
 
-  // --- Render Functions ---
-
   const renderChatItem = (chat: OwnerChat) => (
     <button
       key={chat._id}

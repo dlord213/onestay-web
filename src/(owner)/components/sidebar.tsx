@@ -50,7 +50,7 @@ export default function Sidebar() {
     //   href: "/reservations",
     // },
     {
-      label: "Amenities Management",
+      label: "Amenities",
       icon: Home,
       href: "/amenities",
     },
