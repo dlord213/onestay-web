@@ -23,7 +23,6 @@ import Sidebar from "./components/sidebar";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "../(auth)/store/Auth";
 
-// --- Leaflet Icon Fix ---
 // @ts-ignore
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -33,7 +32,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-// --- Leaflet Helper Components (copied from EditResortModal) ---
 function MapClickEvents({ onSelect }: { onSelect: (latlng: LatLng) => void }) {
   useMapEvents({
     click(e) {
@@ -84,7 +82,6 @@ function MapCentering({ center, zoom }: { center: LatLng; zoom: number }) {
   return null;
 }
 
-// --- Form Data Interface ---
 interface CreateFormData {
   resort_name: string;
   description: string;
@@ -93,7 +90,6 @@ interface CreateFormData {
   longitude: number;
 }
 
-// --- Main Create Resort Screen Component ---
 export default function CreateResortScreen() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<CreateFormData>({
@@ -121,8 +117,7 @@ export default function CreateResortScreen() {
 
   useEffect(() => {
     document.title = "OneStay / Create Resort";
-    // Try to find user's location on load
-    findMyLocation(true); // `true` for silent, no zoom
+    findMyLocation(true);
   }, []);
 
   useEffect(() => {
@@ -132,8 +127,6 @@ export default function CreateResortScreen() {
       }
     };
   }, [imagePreview, selectedFile]);
-
-  // --- Handlers ---
 
   const handleInputChange = (
     field: keyof CreateFormData,
@@ -184,12 +177,11 @@ export default function CreateResortScreen() {
         const latLng = new LatLng(latitude, longitude);
 
         if (!silent) {
-          // If triggered by button, update form and map
           setFormData((prev) => ({ ...prev, latitude, longitude }));
           setMapCenter(latLng);
           setMapZoom(15);
         }
-        setCurrentLocation(latLng); // Always set current location marker
+        setCurrentLocation(latLng);
         setLoadingLocation(false);
       },
       (error) => {
@@ -207,7 +199,6 @@ export default function CreateResortScreen() {
     return new LatLng(formData.latitude, formData.longitude);
   }, [formData.latitude, formData.longitude]);
 
-  // --- Form Submission ---
   const handleCreateResort = async (e: FormEvent) => {
     e.preventDefault();
     if (!token) {
@@ -215,7 +206,6 @@ export default function CreateResortScreen() {
       return;
     }
 
-    // 1. Validation
     if (!formData.resort_name.trim() || !formData.address.trim()) {
       setError("Resort Name and Address are required fields.");
       return;
@@ -235,12 +225,10 @@ export default function CreateResortScreen() {
         },
       };
 
-      // 2. API Call
       await resortAPI.createResort(resortData, selectedFile, token);
 
-      // 3. Success
-      await refreshResorts(); // Update global store
-      navigate("/dashboard"); // Redirect to dashboard
+      await refreshResorts();
+      navigate("/dashboard");
     } catch (err) {
       console.error("Error creating resort:", err);
       setError(err instanceof Error ? err.message : "Failed to create resort.");
@@ -254,7 +242,6 @@ export default function CreateResortScreen() {
       <Sidebar />
       <div className="flex flex-col gap-6 p-12 overflow-y-auto">
         <form onSubmit={handleCreateResort} className="flex flex-col gap-6">
-          {/* --- Header --- */}
           <div className="flex items-center justify-between">
             <h1 className="lg:text-4xl font-bold">Create New Resort</h1>
             <button
@@ -269,7 +256,6 @@ export default function CreateResortScreen() {
             </button>
           </div>
 
-          {/* --- Error Display --- */}
           {error && (
             <div className="alert alert-error shadow-lg">
               <div>
@@ -279,9 +265,7 @@ export default function CreateResortScreen() {
             </div>
           )}
 
-          {/* --- Form Layout --- */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left Column: Form Fields */}
             <div className="flex flex-col gap-4">
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">Resort Name *</legend>
@@ -322,9 +306,7 @@ export default function CreateResortScreen() {
               </fieldset>
             </div>
 
-            {/* Right Column: Map and Image */}
             <div className="flex flex-col gap-4">
-              {/* Location Map */}
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">Location</legend>
                 <p className="text-xs -mt-2 text-base-content/60 mb-2">
@@ -375,7 +357,6 @@ export default function CreateResortScreen() {
                 )}
               </fieldset>
 
-              {/* Image Upload */}
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">Resort Image</legend>
                 {imagePreview ? (

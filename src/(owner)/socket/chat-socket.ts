@@ -56,7 +56,6 @@ export interface ChatUpdateData {
 
 export type UserRole = "owner" | "customer";
 
-// --- UNIFIED CHAT SOCKET CLASS ---
 class ChatSocket {
   private socket: Socket | null = null;
   private isConnected = false;
@@ -66,7 +65,7 @@ class ChatSocket {
   private readonly maxReconnectAttempts = 5;
   private readonly reconnectDelay = 1000;
 
-  // Event handlers - using Set for better performance
+  // Event handlers
   private messageHandlers = new Set<(message: ChatMessage) => void>();
   private messageSentHandlers = new Set<
     (confirmation: MessageSentConfirmation) => void
@@ -84,15 +83,12 @@ class ChatSocket {
         return true;
       }
 
-      // Get user info
       let user, token;
       if (userId && role) {
-        // Manual connection (for customer)
         this.currentUserId = userId;
         this.userRole = role;
         token = await getToken();
       } else {
-        // Auto connection (for owner)
         user = await getCurrentUser();
         token = await getToken();
 
@@ -265,7 +261,6 @@ class ChatSocket {
     return () => this.chatUpdateHandlers.delete(handler);
   }
 
-  // Getters
   get connected(): boolean {
     return this.isConnected;
   }
@@ -286,7 +281,6 @@ class ChatSocket {
   private setupEventListeners(): void {
     if (!this.socket) return;
 
-    // Connection events
     this.socket.on("connect", () => {
       this.isConnected = true;
       this.reconnectAttempts = 0;
@@ -297,7 +291,6 @@ class ChatSocket {
       this.isConnected = false;
       this.emitConnection(false);
 
-      // Auto-reconnect if not manually disconnected
       if (reason !== "io client disconnect") {
         this.handleReconnection();
       }
@@ -354,7 +347,6 @@ class ChatSocket {
       console.log(
         `[FRONTEND-SOCKET] User role: ${this.userRole}, User ID: ${this.currentUserId}`
       );
-      // Convert new_chat to chat_updated format for consistency
       this.emitChatUpdate({
         chatId: chatData.chatId,
         lastMessage: "New conversation started",
@@ -474,9 +466,7 @@ class ChatSocket {
   }
 }
 
-// Export singleton instances for both roles
 export const ownerChatSocket = new ChatSocket();
 export const customerChatSocket = new ChatSocket();
 
-// Export unified class for custom instances
 export { ChatSocket };

@@ -70,13 +70,9 @@ function DraggableMarker({
   );
 }
 
-/**
- * A component to center the map
- */
 function MapCentering({ center, zoom }: { center: LatLng; zoom: number }) {
   const map = useMap();
   useEffect(() => {
-    // Check if map is initialized
     if (map) {
       map.flyTo(center, zoom);
     }
@@ -84,7 +80,6 @@ function MapCentering({ center, zoom }: { center: LatLng; zoom: number }) {
   return null;
 }
 
-// --- Form Data Interface ---
 interface EditFormData {
   resort_name: string;
   description: string;
@@ -93,7 +88,6 @@ interface EditFormData {
   longitude: number;
 }
 
-// --- Component Props ---
 interface EditResortModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -131,8 +125,6 @@ export default function EditResortModal({
 
   const refreshResorts = useResortStore((state) => state.refreshResorts);
 
-  // --- Effects ---
-
   useEffect(() => {
     if (isOpen && resort) {
       const resortLocation = new LatLng(
@@ -166,8 +158,6 @@ export default function EditResortModal({
       }
     };
   }, [imagePreview, selectedFile]);
-
-  // --- Handlers ---
 
   const handleInputChange = (
     field: keyof EditFormData,
@@ -239,7 +229,6 @@ export default function EditResortModal({
   const saveResortChanges = async () => {
     if (!resort) return;
 
-    // 1. Validation
     if (!formData.resort_name.trim() || !formData.address.trim()) {
       setError("Resort Name and Address are required fields.");
       return;

@@ -7,8 +7,6 @@ import { Users, Plus, AlertCircle, Inbox } from "lucide-react";
 import CreateRoomModal from "./components/modals/add_room";
 import { Link } from "react-router";
 
-// --- Helper Components ---
-
 const LoadingComponent = () => (
   <div className="flex justify-center items-center col-span-full h-64">
     <div className="loading loading-spinner loading-lg text-primary"></div>
@@ -45,8 +43,6 @@ const EmptyComponent = () => (
     </p>
   </div>
 );
-
-// --- Main Screen Component ---
 
 export default function RoomsScreen() {
   const [rooms, setRooms] = useState<Room[]>([]);

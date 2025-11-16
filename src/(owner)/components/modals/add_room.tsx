@@ -34,8 +34,6 @@ const INITIAL_FORM_STATE = {
   status: "available",
 };
 
-// --- Modal Component ---
-
 interface CreateRoomModalProps {
   isOpen: boolean;
   onClose: () => void;

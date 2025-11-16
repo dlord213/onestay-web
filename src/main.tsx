@@ -21,11 +21,24 @@ import "leaflet/dist/leaflet.css";
 import "react-calendar/dist/Calendar.css";
 import ViewRoomScreen from "./(owner)/view_room";
 import CreateResortScreen from "./(owner)/create-resort";
+import RegisterScreen from "./(auth)/register";
 
 const router = createBrowserRouter([
   {
     path: "/",
     Component: LoginScreen,
+    loader: async () => {
+      const { user } = useAuthStore.getState();
+
+      if (user?.role == "owner") {
+        useResortStore.getState().fetchResortsByOwner();
+        return redirect("dashboard");
+      }
+    },
+  },
+  {
+    path: "register",
+    Component: RegisterScreen,
     loader: async () => {
       const { user } = useAuthStore.getState();
 

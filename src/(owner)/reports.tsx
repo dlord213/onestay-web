@@ -21,8 +21,6 @@ import { usePDF } from "react-to-pdf";
 import { AlertCircle, Inbox, ListFilter, Download } from "lucide-react";
 import { PDFReportLayout } from "./components/pdf_layout";
 
-// --- Helper Components ---
-
 const LoadingComponent = () => (
   <div className="flex justify-center items-center h-[60vh]">
     <div className="loading loading-spinner loading-lg text-primary"></div>
@@ -57,8 +55,6 @@ const EmptyComponent = () => (
     </p>
   </div>
 );
-
-// --- Main Screen Component ---
 
 export default function ReportsScreen() {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
@@ -101,8 +97,6 @@ export default function ReportsScreen() {
       setLoading(false);
     }
   }, [selectedFilter]);
-
-  // --- Chart Data Calculation ---
 
   const monthlySalesData = useMemo(() => {
     const salesData = allMonths.map((month) => ({
@@ -166,13 +160,9 @@ export default function ReportsScreen() {
     return salesByMonth;
   }, [reservations]);
 
-  // --- Effects ---
-
   useEffect(() => {
     fetchReservations();
   }, [fetchReservations]);
-
-  // --- Render Logic ---
 
   const renderContent = () => {
     if (loading) {

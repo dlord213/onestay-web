@@ -13,8 +13,6 @@ import { getStatusColor } from "./helpers/ui";
 import { allMonths } from "./helpers/general";
 import { Link } from "react-router";
 
-// --- Helper Components ---
-
 const LoadingComponent = () => (
   <div className="flex justify-center items-center h-64">
     <div className="loading loading-spinner loading-lg text-primary"></div>
@@ -50,8 +48,6 @@ const EmptyComponent = () => (
   </div>
 );
 
-// --- Main Screen Component ---
-
 export default function GuestsScreen() {
   const [selectedMonth, setSelectedMonth] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,7 +63,6 @@ export default function GuestsScreen() {
     document.title = "OneStay / Guests";
   }, []);
 
-  // Pagination
   const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -211,7 +206,6 @@ export default function GuestsScreen() {
           </table>
         </div>
 
-        {/* --- Load More Button --- */}
         {pagination && pagination.hasNextPage && (
           <div className="text-center mt-8">
             <button

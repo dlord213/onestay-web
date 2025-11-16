@@ -7,8 +7,6 @@ import { AlertCircle, Check, ThumbsDown, X } from "lucide-react";
 import { getStatusColor } from "./helpers/ui";
 import { useParams } from "react-router";
 
-// --- Helper Components ---
-
 const LoadingComponent = () => (
   <div className="flex justify-center items-center h-[80vh]">
     <div className="loading loading-spinner loading-lg text-primary"></div>
@@ -33,8 +31,6 @@ const ErrorComponent = ({
     </div>
   </div>
 );
-
-// --- Main Screen Component ---
 
 export default function ViewReservationScreen() {
   const params = useParams();
@@ -77,13 +73,11 @@ export default function ViewReservationScreen() {
     fetchReservation();
   }, [fetchReservation]);
 
-  // A single, reusable handler for all status updates
   const handleUpdateStatus = async (
     status: "approved" | "rejected" | "cancelled" | "completed"
   ) => {
     if (!reservation) return;
 
-    // Use a specific API endpoint if available, otherwise use the general update
     const apiCall = {
       approved: () =>
         reservationAPI.updateReservationStatus(reservation._id, "approved"),
@@ -99,7 +93,6 @@ export default function ViewReservationScreen() {
 
       await apiCall();
 
-      // Refresh the data to show the new status
       await fetchReservation();
     } catch (err: any) {
       console.error(`Failed to ${status} reservation:`, err);
@@ -119,13 +112,11 @@ export default function ViewReservationScreen() {
     }
 
     if (!reservation) {
-      return null; // Error component will have already handled this
+      return null;
     }
 
-    // --- Data is loaded and reservation exists ---
     return (
       <div className="flex flex-col gap-4 p-6 bg-base-300 rounded-xl">
-        {/* --- Guest Details --- */}
         <h2 className="text-xl font-semibold">Guest Details</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <fieldset className="fieldset">
@@ -148,7 +139,6 @@ export default function ViewReservationScreen() {
           </fieldset>
         </div>
 
-        {/* --- Reservation Details --- */}
         <h2 className="text-xl font-semibold mt-4">Reservation Details</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <fieldset className="fieldset">
@@ -210,7 +200,6 @@ export default function ViewReservationScreen() {
           </fieldset>
         </div>
 
-        {/* --- Action Buttons --- */}
         <div className="flex flex-col gap-4 items-center mt-6">
           {actionError && (
             <div className="alert alert-error shadow-lg">

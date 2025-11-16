@@ -27,8 +27,6 @@ import { Link } from "react-router";
 import EditResortModal from "./components/modals/edit_resort";
 import type { Resort } from "../api/resort";
 
-// --- Reusable Helper Components ---
-
 const LoadingSpinner = ({
   size = "lg",
 }: {
@@ -189,8 +187,6 @@ const ReservationsTable = ({
   );
 };
 
-// --- Main Dashboard Screen ---
-
 export default function DashboardScreen() {
   const {
     resorts,
@@ -243,7 +239,7 @@ export default function DashboardScreen() {
         } else {
           setReservationsLoading(true);
           setReservationsError(null);
-          setCurrentPage(1); // Reset page on new filter/search
+          setCurrentPage(1);
         }
 
         const pageToLoad = loadMore ? currentPage + 1 : 1;
@@ -258,7 +254,7 @@ export default function DashboardScreen() {
           limit: 10,
           sortBy: "createdAt",
           sortOrder: "desc",
-          search: searchQuery, // Pass search query to API
+          search: searchQuery,
         });
 
         console.log(response.reservations);
@@ -343,8 +339,6 @@ export default function DashboardScreen() {
     });
   }, [reservations, selectedMonth]);
 
-  // --- Render Logic ---
-
   if (resortsLoading) {
     return <FullPageLoader text="Loading your resort..." />;
   }
@@ -361,8 +355,6 @@ export default function DashboardScreen() {
   };
 
   const handleEditSuccess = () => {
-    // The modal refreshes the resort store
-    // We just need to refetch the stats
     if (currentResort) {
       loadResortStats(currentResort._id);
     }

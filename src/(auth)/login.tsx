@@ -3,8 +3,8 @@ import { useEffect, useState, type FormEvent } from "react";
 import type { User, UserRole } from "./types/user";
 import { authAPI } from "../api/auth";
 import { useAuthStore } from "./store/Auth";
-import { AlertCircle, LockKeyhole } from "lucide-react";
-import { useNavigate } from "react-router";
+import { AlertCircle } from "lucide-react";
+import { Link, useNavigate } from "react-router";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -48,7 +48,7 @@ export default function LoginScreen() {
       navigate("/dashboard", { replace: true });
     } catch (err: any) {
       console.error("Login error:", err);
-      setError(err.message || "Login failed. Please check your credentials.");
+      setError("Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
@@ -65,16 +65,12 @@ export default function LoginScreen() {
         className="flex flex-col p-12 bg-base-100 rounded-lg gap-4 w-full max-w-lg"
       >
         <div className="flex flex-col items-center text-center gap-3 mb-4">
-          <div className="p-4 bg-primary rounded-full text-primary-content">
-            <LockKeyhole size={32} />
-          </div>
           <h1 className="text-3xl font-bold">OneStay</h1>
           <p className="text-base-content/70 text-sm">
             Let the relaxation begin.
           </p>
         </div>
 
-        {/* --- Error Display --- */}
         {error && (
           <div className="alert alert-error shadow-lg text-sm">
             <div>
@@ -108,12 +104,7 @@ export default function LoginScreen() {
             />
           </fieldset>
         </div>
-
-        <button
-          type="submit"
-          className="btn btn-neutral btn-ghost"
-          disabled={isLoading}
-        >
+        <button type="submit" className="btn btn-neutral" disabled={isLoading}>
           {isLoading ? (
             <>
               <span className="loading loading-spinner"></span>
@@ -123,6 +114,15 @@ export default function LoginScreen() {
             "Login"
           )}
         </button>
+        <p className="text-sm">
+          New to OneStay?
+          <Link
+            to={"/register"}
+            className="underline text-primary hover:text-primary-focus ml-1"
+          >
+            Register
+          </Link>
+        </p>
       </form>
     </main>
   );

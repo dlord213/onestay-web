@@ -5,10 +5,9 @@ import { roomAPI, type Room } from "../api/room";
 import { feedbackAPI } from "../api/feedback";
 import { Users, Star, AlertCircle, Inbox } from "lucide-react";
 import dayjs from "dayjs";
-import type { PaginationInfo } from "../api/reservation"; // Re-using this type
+import type { PaginationInfo } from "../api/reservation";
 import { useParams } from "react-router";
 
-// --- Type Definitions based on your sample ---
 interface FeedbackUser {
   _id: string;
   username: string;
@@ -26,8 +25,6 @@ interface RatingStats {
   averageRating: number;
   totalReviews: number;
 }
-
-// --- Helper Components ---
 
 const LoadingComponent = () => (
   <div className="flex justify-center items-center h-full">
@@ -66,8 +63,6 @@ const EmptyFeedbacks = () => (
   </div>
 );
 
-// --- Main Screen Component ---
-
 export default function ViewRoomScreen() {
   const params = useParams();
 
@@ -97,9 +92,7 @@ export default function ViewRoomScreen() {
           setLoadingMore(true);
         }
 
-        // Fetch room and feedbacks in parallel
         const [roomData, feedbackData] = await Promise.all([
-          // Only fetch room on first load
           page === 1 ? roomAPI.getRoomById(params.id) : Promise.resolve(room),
           feedbackAPI.getRoomFeedbacks(params.id, page, limit),
         ]);
@@ -108,7 +101,6 @@ export default function ViewRoomScreen() {
           setRoom(roomData);
           setFeedbacks(feedbackData.feedbacks || []);
         } else {
-          // Append new feedbacks
           setFeedbacks((prev) => [...prev, ...feedbackData.feedbacks]);
         }
 
@@ -131,11 +123,10 @@ export default function ViewRoomScreen() {
     [params.id]
   );
 
-  // Initial fetch
   useEffect(() => {
     document.title = "OneStay / View Room";
-    fetchRoomData(1); // Fetch page 1
-  }, [fetchRoomData]); // fetchRoomData is memoized
+    fetchRoomData(1);
+  }, [fetchRoomData]);
 
   const handleLoadMore = () => {
     if (pagination?.hasNextPage && !loadingMore) {
@@ -143,7 +134,6 @@ export default function ViewRoomScreen() {
     }
   };
 
-  // Helper to render star ratings
   const renderStars = (rating: number) => {
     return (
       <div className="flex items-center">
@@ -175,12 +165,11 @@ export default function ViewRoomScreen() {
     }
 
     if (!room) {
-      return null; // Should be covered by error state
+      return null;
     }
 
     return (
       <div className="flex flex-col gap-8 p-12 overflow-y-auto">
-        {/* --- Room Header --- */}
         <div className="flex flex-col gap-2">
           <h2 className="text-4xl font-bold">{room.room_type}</h2>
           <div className="flex flex-row gap-2 items-center">
@@ -201,7 +190,6 @@ export default function ViewRoomScreen() {
           </div>
         </div>
 
-        {/* --- Rating Stats --- */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="stat bg-base-200 rounded-xl shadow">
             <div className="stat-figure text-secondary">
@@ -225,7 +213,6 @@ export default function ViewRoomScreen() {
           </div>
         </div>
 
-        {/* --- Feedback List --- */}
         <div className="flex flex-col gap-4">
           <h2 className="text-2xl font-bold">Guest Feedback</h2>
           {feedbacks.length === 0 ? (
@@ -262,7 +249,6 @@ export default function ViewRoomScreen() {
                 </div>
               ))}
 
-              {/* Load More Button */}
               {pagination && pagination.hasNextPage && (
                 <div className="text-center mt-4">
                   <button

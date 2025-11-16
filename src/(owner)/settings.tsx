@@ -49,8 +49,6 @@ const SettingsItem = ({
   );
 };
 
-// --- Main Screen Component ---
-
 export default function SettingsScreen() {
   const navigate = useNavigate();
   const { logout } = useAuthStore();

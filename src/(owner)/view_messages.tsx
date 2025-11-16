@@ -52,7 +52,7 @@ export default function OwnerChatConversation() {
   const initializeChat = async () => {
     try {
       setLoading(true);
-      await loadChat(); // This will now load all messages
+      await loadChat();
 
       const connected =
         ownerChatSocket.connected || (await ownerChatSocket.connect());

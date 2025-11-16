@@ -26,7 +26,6 @@ export default function ChangePasswordModal({
 
   const { user } = useAuthStore();
 
-  // Reset form when modal opens
   useEffect(() => {
     if (isOpen) {
       setCurrentPassword("");

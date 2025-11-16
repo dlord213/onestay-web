@@ -40,7 +40,6 @@ export default function UpdateProfileModal({
     setError(null);
     setSuccess(null);
 
-    // Validation
     if (!username.trim()) {
       setError("Username cannot be empty.");
       return;
