@@ -26,6 +26,7 @@ import ResortScreenMaps from "./components/maps";
 import { Link } from "react-router";
 import EditResortModal from "./components/modals/edit_resort";
 import type { Resort } from "../api/resort";
+import MobilePlaceHolder from "./components/mobile_placeholder";
 
 const LoadingSpinner = ({
   size = "lg",
@@ -50,7 +51,7 @@ const FullPageLoader = ({
 );
 
 const NoResortEmptyState = () => (
-  <main className="grid grid-cols-[0.2fr_1fr] h-dvh">
+  <main className="hidden lg:grid grid-cols-[0.2fr_1fr] h-dvh">
     <Sidebar />
     <div className="flex flex-col gap-6 p-12 items-center justify-center text-center">
       <Inbox size={64} className="opacity-30 mb-4" />
@@ -225,8 +226,6 @@ export default function DashboardScreen() {
     document.title = "OneStay / Dashboard";
   }, []);
 
-  // --- Data Fetching Functions ---
-
   const fetchReservations = useCallback(
     async (isRefresh = false, loadMore = false) => {
       try {
@@ -314,8 +313,6 @@ export default function DashboardScreen() {
     }
   }, []);
 
-  // --- UseEffect Hooks ---
-
   useEffect(() => {
     fetchResortsByOwner();
   }, [fetchResortsByOwner]);
@@ -361,9 +358,10 @@ export default function DashboardScreen() {
   };
 
   return (
-    <main className="relative grid grid-cols-[0.3fr_1fr] 2xl:grid-cols-[0.2fr_1fr] h-dvh bg-base-100">
+    <main className="relative flex flex-col gap-2 lg:grid grid-cols-[0.3fr_1fr] 2xl:grid-cols-[0.2fr_1fr] h-dvh bg-base-100">
       <Sidebar />
-      <div className="flex flex-col gap-8 p-12 overflow-y-auto">
+      <MobilePlaceHolder />
+      <div className="hidden lg:flex flex-col gap-8 p-12 overflow-y-auto">
         <div className="flex flex-row items-center justify-between">
           <h1 className="lg:text-4xl font-bold">Dashboard</h1>
           <button

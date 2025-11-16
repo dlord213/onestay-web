@@ -56,7 +56,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="sticky top-4 flex flex-col gap-2 p-4 bg-base-200 h-screen border-r border-r-base-300">
+    <div className="hidden sticky top-4 lg:flex flex-col gap-2 p-4 bg-base-200 h-screen border-r border-r-base-300">
       <h1 className="text-center font-bold lg:text-4xl py-4">OneStay</h1>
       <div className="flex flex-col gap-4 flex-1">
         {navItems.map((item) => {

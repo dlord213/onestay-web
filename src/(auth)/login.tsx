@@ -5,6 +5,7 @@ import { authAPI } from "../api/auth";
 import { useAuthStore } from "./store/Auth";
 import { AlertCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router";
+import MobilePlaceHolder from "../(owner)/components/mobile_placeholder";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -62,7 +63,7 @@ export default function LoginScreen() {
     <main className="flex flex-col min-h-dvh p-4 mx-auto bg-base-300 items-center justify-center">
       <form
         onSubmit={handleLogin}
-        className="flex flex-col p-12 bg-base-100 rounded-lg gap-4 w-full max-w-lg"
+        className="hidden lg:flex flex-col p-12 bg-base-100 rounded-lg gap-4 w-full max-w-lg"
       >
         <div className="flex flex-col items-center text-center gap-3 mb-4">
           <h1 className="text-3xl font-bold">OneStay</h1>
@@ -73,8 +74,8 @@ export default function LoginScreen() {
 
         {error && (
           <div className="gap-2 alert alert-error shadow-lg text-sm">
-              <AlertCircle size={20} />
-              <span>{error}</span>
+            <AlertCircle size={20} />
+            <span>{error}</span>
           </div>
         )}
 
@@ -122,6 +123,10 @@ export default function LoginScreen() {
           </Link>
         </p>
       </form>
+      <div className="flex lg:hidden flex-col gap-2 items-center bg-base-100 p-4 rounded-xl shadow-lg">
+        <h1 className="font-bold text-2xl">OneStay</h1>
+        <h1 className="text-center text-base-content/60 text-sm">This is for desktop/web only, please login via mobile.</h1>
+      </div>
     </main>
   );
 }
