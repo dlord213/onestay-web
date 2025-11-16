@@ -48,6 +48,8 @@ export interface RoomFormData {
   status: string;
 }
 
+export type UpdateRoomData = Partial<Omit<RoomFormData, "resort_id">>;
+
 export const roomAPI = {
   createRoom: async (roomData: RoomFormData): Promise<Room> => {
     try {
@@ -152,6 +154,37 @@ export const roomAPI = {
         room_id: roomId,
         booked_dates: [],
       };
+    }
+  },
+  updateRoom: async (
+    roomId: string,
+    roomData: UpdateRoomData
+  ): Promise<Room> => {
+    try {
+      const response = await authenticatedApiRequest(`/room/${roomId}`, {
+        method: "PUT",
+        body: JSON.stringify(roomData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return response;
+    } catch (error) {
+      throw new Error(
+        error instanceof Error ? error.message : "Failed to update room"
+      );
+    }
+  },
+
+  deleteRoom: async (roomId: string): Promise<void> => {
+    try {
+      await authenticatedApiRequest(`/room/${roomId}`, {
+        method: "DELETE",
+      });
+    } catch (error) {
+      throw new Error(
+        error instanceof Error ? error.message : "Failed to delete room"
+      );
     }
   },
 };

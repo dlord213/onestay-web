@@ -7,6 +7,7 @@ import {
   MessageCircle,
   Building,
   Settings,
+  Home,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
 import { useAuthStore } from "../../(auth)/store/Auth";
@@ -48,11 +49,11 @@ export default function Sidebar() {
     //   icon: ContactIcon,
     //   href: "/reservations",
     // },
-    // {
-    //   label: "Amenities Management",
-    //   icon: Home,
-    //   href: "/amenities",
-    // },
+    {
+      label: "Amenities Management",
+      icon: Home,
+      href: "/amenities",
+    },
   ];
 
   return (

@@ -1,12 +1,15 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useState } from "react";
 import Sidebar from "./components/sidebar";
 import { roomAPI, type Room } from "../api/room";
 import { feedbackAPI } from "../api/feedback";
-import { Users, Star, AlertCircle, Inbox } from "lucide-react";
+import { Users, Star, AlertCircle, Inbox, Edit, Trash2 } from "lucide-react";
 import dayjs from "dayjs";
 import type { PaginationInfo } from "../api/reservation";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import DeleteConfirmationModal from "./components/modals/delete_amenity";
+import EditRoomModal from "./components/modals/edit_room";
 
 interface FeedbackUser {
   _id: string;
@@ -65,6 +68,7 @@ const EmptyFeedbacks = () => (
 
 export default function ViewRoomScreen() {
   const params = useParams();
+  const navigate = useNavigate();
 
   // Data State
   const [room, setRoom] = useState<Room | null>(null);
@@ -79,6 +83,10 @@ export default function ViewRoomScreen() {
   const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
+
+  // Modal state
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const fetchRoomData = useCallback(
     async (page = 1, limit = 10, loadMore = false) => {
@@ -149,6 +157,22 @@ export default function ViewRoomScreen() {
     );
   };
 
+  const handleEditSuccess = (updatedRoom: Room) => {
+    setRoom(updatedRoom);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!room) return;
+
+    try {
+      await roomAPI.deleteRoom(room._id);
+      setIsDeleteModalOpen(false);
+      navigate("/rooms");
+    } catch (err) {
+      throw err;
+    }
+  };
+
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -170,23 +194,41 @@ export default function ViewRoomScreen() {
 
     return (
       <div className="flex flex-col gap-8 p-12 overflow-y-auto">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-4xl font-bold">{room.room_type}</h2>
-          <div className="flex flex-row gap-2 items-center">
-            <div className="flex flex-row gap-2 items-center badge badge-neutral badge-lg">
-              <Users size={16} className="opacity-70" />
-              <p>{room.capacity} guests</p>
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-4xl font-bold">{room.room_type}</h2>
+            <div className="flex flex-row gap-2 items-center">
+              <div className="flex flex-row gap-2 items-center badge badge-neutral badge-lg">
+                <Users size={16} className="opacity-70" />
+                <p>{room.capacity} guests</p>
+              </div>
+              <h3 className="badge badge-neutral badge-lg">
+                ₱{room.price_per_night.toLocaleString()}/night
+              </h3>
+              <h3
+                className={`badge badge-lg ${
+                  room.status === "available" ? "badge-success" : "badge-error"
+                }`}
+              >
+                {room.status}
+              </h3>
             </div>
-            <h3 className="badge badge-neutral badge-lg">
-              ₱{room.price_per_night.toLocaleString()}/night
-            </h3>
-            <h3
-              className={`badge badge-lg ${
-                room.status === "available" ? "badge-success" : "badge-error"
-              }`}
+          </div>
+          <div className="flex gap-2">
+            <button
+              className="btn btn-outline btn-primary"
+              onClick={() => setIsEditModalOpen(true)}
             >
-              {room.status}
-            </h3>
+              <Edit size={16} />
+              Edit
+            </button>
+            <button
+              className="btn btn-outline btn-error"
+              onClick={() => setIsDeleteModalOpen(true)}
+            >
+              <Trash2 size={16} />
+              Delete
+            </button>
           </div>
         </div>
 
@@ -274,6 +316,20 @@ export default function ViewRoomScreen() {
     <main className="grid grid-cols-[0.2fr_1fr] h-dvh bg-base-100">
       <Sidebar />
       {renderContent()}
+      <EditRoomModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSuccess={handleEditSuccess}
+        roomToEdit={room}
+      />
+
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Room"
+        message={`Are you sure you want to delete the "${room?.room_type}"? This will permanently remove all associated data, including reservations and feedback. This action cannot be undone.`}
+      />
     </main>
   );
 }
