@@ -21,11 +21,14 @@ import {
   Calendar as CalendarIcon,
   Search,
   Edit,
+  MessageSquare,
 } from "lucide-react";
 import ResortScreenMaps from "./components/maps";
 import { Link } from "react-router";
 import EditResortModal from "./components/modals/edit_resort";
 import type { Resort } from "../api/resort";
+import { feedbackAPI, type Feedback } from "../api/feedback";
+import { roomAPI } from "../api/room";
 
 const LoadingSpinner = ({
   size = "lg",
@@ -62,6 +65,21 @@ const NoResortEmptyState = () => (
     </div>
   </main>
 );
+
+const renderStars = (rating: number) => {
+  return (
+    <div className="flex items-center">
+      {[...Array(5)].map((_, i) => (
+        <Star
+          key={i}
+          size={16}
+          className={i < rating ? "text-yellow-400" : "text-base-300"}
+          fill={i < rating ? "currentColor" : "none"}
+        />
+      ))}
+    </div>
+  );
+};
 
 const ReservationsTable = ({
   reservations,
@@ -221,6 +239,11 @@ export default function DashboardScreen() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedResort, setSelectedResort] = useState<Resort | null>(null);
 
+  // --- 2. State for Feedbacks (no change) ---
+  const [recentFeedbacks, setRecentFeedbacks] = useState<Feedback[]>([]);
+  const [loadingFeedbacks, setLoadingFeedbacks] = useState(true);
+  const [feedbacksError, setFeedbacksError] = useState<string | null>(null);
+
   useEffect(() => {
     document.title = "OneStay / Dashboard";
   }, []);
@@ -312,6 +335,39 @@ export default function DashboardScreen() {
     }
   }, []);
 
+  const loadRecentFeedbacks = useCallback(async (resortId: string) => {
+    try {
+      setLoadingFeedbacks(true);
+      setFeedbacksError(null);
+
+      const { rooms } = await roomAPI.getRoomsByResort(resortId);
+      if (!rooms || rooms.length === 0) {
+        setRecentFeedbacks([]);
+        return;
+      }
+
+      const feedbackPromises = rooms.map((room) =>
+        feedbackAPI.getRoomFeedbacks(room._id)
+      );
+
+      const allFeedbackResponses = await Promise.all(feedbackPromises);
+
+      const allFeedbacks = allFeedbackResponses.flatMap((res) => res.feedbacks);
+
+      allFeedbacks.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      setRecentFeedbacks(allFeedbacks.slice(0, 10));
+    } catch (error: any) {
+      console.error("Error loading recent feedbacks:", error);
+      setFeedbacksError(error.message || "Failed to load feedback");
+    } finally {
+      setLoadingFeedbacks(false);
+    }
+  }, []);
+
   useEffect(() => {
     fetchResortsByOwner();
   }, [fetchResortsByOwner]);
@@ -322,8 +378,16 @@ export default function DashboardScreen() {
       loadAmenities(resortId);
       loadResortStats(resortId);
       fetchReservations();
+      loadRecentFeedbacks(resortId);
     }
-  }, [hasResorts, resorts, loadAmenities, loadResortStats, fetchReservations]);
+  }, [
+    hasResorts,
+    resorts,
+    loadAmenities,
+    loadResortStats,
+    fetchReservations,
+    loadRecentFeedbacks,
+  ]);
 
   const filteredReservations = useMemo(() => {
     if (selectedMonth === "All") {
@@ -573,8 +637,70 @@ export default function DashboardScreen() {
               pagination={pagination}
             />
           </div>
+
+          <div className="flex flex-col gap-4">
+            <h1 className="text-2xl font-bold">Recent Guest Feedback</h1>
+            <div className="flex flex-col gap-4 p-4 rounded-xl bg-base-200 shadow-sm min-h-[500px]">
+              {loadingFeedbacks ? (
+                <div className="flex justify-center items-center h-64">
+                  <LoadingSpinner />
+                </div>
+              ) : feedbacksError ? (
+                <div className="alert alert-warning">
+                  <AlertCircle size={20} />
+                  <span>Could not load feedback.</span>
+                </div>
+              ) : recentFeedbacks.length === 0 ? (
+                <div className="flex flex-col justify-center items-center h-64 text-center">
+                  <MessageSquare size={48} className="mb-4 opacity-50" />
+                  <h3 className="font-bold text-xl">No Feedback Yet</h3>
+                  <p className="text-sm py-2 opacity-70">
+                    When guests leave reviews, they will appear here.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {recentFeedbacks.map((feedback) => {
+                    return (
+                      <div
+                        key={feedback._id}
+                        className="card bg-base-100 shadow-sm"
+                      >
+                        <div className="card-body p-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-3">
+                              <div className="avatar placeholder">
+                                <div className="bg-neutral text-neutral-content rounded-full w-10">
+                                  <span>
+                                    {feedback.from_user_id.username
+                                      .substring(0, 1)
+                                      .toUpperCase()}
+                                  </span>
+                                </div>
+                              </div>
+                              <span className="font-bold">
+                                {feedback.from_user_id.username}
+                              </span>
+                            </div>
+                            {renderStars(feedback.rating)}
+                          </div>
+                          <p className="text-base-content/90 italic">
+                            "{feedback.comment}"
+                          </p>
+                          <span className="text-xs text-base-content/50 mt-1">
+                            {dayjs(feedback.createdAt).format("MMM DD, YYYY")}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
+
       <EditResortModal
         isOpen={editModalOpen}
         onClose={() => setEditModalOpen(false)}

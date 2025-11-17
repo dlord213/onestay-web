@@ -11,7 +11,7 @@ export interface FeedbackRequest {
 
 export interface Feedback {
   _id: string;
-  from_user_id: string;
+  from_user_id: any;
   to_user_id: string;
   room_id: string;
   reservation_id: string;
