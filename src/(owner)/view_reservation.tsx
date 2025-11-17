@@ -114,6 +114,10 @@ export default function ViewReservationScreen() {
     if (!reservation) {
       return null;
     }
+    const today = dayjs().startOf("day");
+    const checkoutDate = dayjs(reservation.end_date).startOf("day");
+    const canComplete =
+      today.isAfter(checkoutDate) || today.isSame(checkoutDate);
 
     return (
       <div className="flex flex-col gap-4 p-6 bg-base-300 rounded-xl">
@@ -225,18 +229,27 @@ export default function ViewReservationScreen() {
                   )}
                   Cancel Reservation
                 </button>
-                <button
-                  className="btn btn-success flex-1"
-                  onClick={() => handleUpdateStatus("completed")}
-                  disabled={isSubmitting}
+                <div
+                  className="tooltip flex-1"
+                  data-tip={
+                    !canComplete
+                      ? "Can only mark as complete on or after the checkout date."
+                      : ""
+                  }
                 >
-                  {isSubmitting ? (
-                    <span className="loading loading-spinner"></span>
-                  ) : (
-                    <Check size={18} />
-                  )}
-                  Mark as Completed
-                </button>
+                  <button
+                    className="btn btn-success flex-1 w-full"
+                    onClick={() => handleUpdateStatus("completed")}
+                    disabled={isSubmitting || !canComplete}
+                  >
+                    {isSubmitting ? (
+                      <span className="loading loading-spinner"></span>
+                    ) : (
+                      <Check size={18} />
+                    )}
+                    Mark as Completed
+                  </button>
+                </div>
               </>
             )}
 
