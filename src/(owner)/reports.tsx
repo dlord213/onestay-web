@@ -380,7 +380,7 @@ export default function ReportsScreen() {
         monthlySalesData={pdfData.salesData}
         roomTypeData={pdfData.roomData}
         detailedSalesData={pdfData.salesByMonth}
-        filterMonth={pdfFilterMonth}
+        filter={pdfFilterMonth}
         colors={COLORS}
       />
     </main>
